@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block title %}Add Workout{% endblock %}
+{% block page_title %}Add Workout{% endblock %}
+
+{% block main %}
+<div class="page-header">
+    <div>
+        <h2>Log a Workout</h2>
+        <p>Track your training session.</p>
+    </div>
+</div>
+
+<div class="card" style="max-width:720px;">
+    <form action="/add" method="post" id="workoutForm">
+        <div class="grid-2">
+            <div class="form-group">
+                <label class="form-label">Workout Type</label>
+                <input class="form-control" name="type" placeholder="e.g. Running, Bench Press" required autofocus>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Category</label>
+                <select class="form-select" name="category" required>
+                    <option value="" disabled selected>Choose...</option>
+                    <option value="Cardio">Cardio</option>
+                    <option value="Strength">Strength</option>
+                    <option value="Flexibility">Flexibility</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="form-group">
+                <label class="form-label">Duration (minutes)</label>
+                <input class="form-control" name="duration" type="number" min="1" max="600" placeholder="30" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Calories Burned</label>
+                <input class="form-control" name="calories" type="number" min="0" max="5000" placeholder="250" required>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="form-group">
+                <label class="form-label">Date</label>
+                <input class="form-control" name="date" type="date" id="dateInput" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Mood</label>
+                <select class="form-select" name="mood">
+                    <option value="">—</option>
+                    <option value="💪 Strong">💪 Strong</option>
+                    <option value="🔥 Energized">🔥 Energized</option>
+                    <option value="😊 Good">😊 Good</option>
+                    <option value="😐 Okay">😐 Okay</option>
+                    <option value="😴 Tired">😴 Tired</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Notes (optional)</label>
+            <textarea class="form-control" name="notes" placeholder="How did it go?"></textarea>
+        </div>
+
+        <div style="display:flex; gap:12px;">
+            <button class="btn btn-primary" type="submit">
+                <i class="bi bi-check-lg"></i> Save Workout
+            </button>
+            <a href="/" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Default date to today
+    document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
+</script>
+{% endblock %}

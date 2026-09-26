@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}My Workouts{% endblock %}
+{% block page_title %}My Workouts{% endblock %}
+
+{% block main %}
+<div class="page-header">
+    <div>
+        <h2>All Workouts</h2>
+        <p>{{ workouts|length }} total session{{ 's' if workouts|length != 1 else '' }}</p>
+    </div>
+    <div style="display:flex; gap:10px;">
+        <a href="/export" class="btn btn-outline"><i class="bi bi-download"></i> Export CSV</a>
+        <a href="/add" class="btn btn-primary" style="width:auto;"><i class="bi bi-plus-lg"></i> Add</a>
+    </div>
+</div>
+
+{% if workouts %}
+<div class="table-wrapper">
+    <div class="table-scroll">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Category</th>
+                    <th>Duration</th>
+                    <th>Calories</th>
+                    <th>Mood</th>
+                    <th style="text-align:right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for w in workouts %}
+                <tr>
+                    <td class="fw-bold">{{ w.date }}</td>
+                    <td>{{ w.type }}</td>
+                    <td><span class="badge-pill badge-{{ w.category|lower }}">{{ w.category }}</span></td>
+                    <td>{{ w.duration }} min</td>
+                    <td>{{ w.calories }} kcal</td>
+                    <td>{{ w.mood or '—' }}</td>
+                    <td style="text-align:right;">
+                        <a href="/edit/{{ w.id }}" class="btn-icon" title="Edit"><i class="bi bi-pencil"></i></a>
+                        <form action="/delete/{{ w.id }}" method="post" style="display:inline;" onsubmit="return confirm('Delete this workout?');">
+                            <button type="submit" class="btn-icon" title="Delete"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="card empty-state">
+    <i class="bi bi-clipboard-x"></i>
+    <h3>No workouts logged yet</h3>
+    <p>Add your first workout to get started.</p>
+    <a href="/add" class="btn btn-primary mt-2" style="width:auto; display:inline-flex;">Add Workout</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}Goals{% endblock %}
+{% block page_title %}Weekly Goals{% endblock %}
+
+{% block main %}
+<div class="page-header">
+    <div>
+        <h2>Set Your Weekly Goals</h2>
+        <p>Push yourself — but stay realistic.</p>
+    </div>
+</div>
+
+<div class="card" style="max-width:600px;">
+    <form action="/goals" method="post">
+        <div class="form-group">
+            <label class="form-label">Workout Days per Week</label>
+            <input class="form-control" name="goal_days" type="number" min="1" max="7"
+                   value="{{ user.weekly_goal_days or 5 }}" required>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Total Minutes per Week</label>
+            <input class="form-control" name="goal_minutes" type="number" min="10" max="3000"
+                   value="{{ user.weekly_goal_minutes or 150 }}" required>
+        </div>
+
+        <button class="btn btn-primary" type="submit"><i class="bi bi-bullseye"></i> Save Goals</button>
+    </form>
+</div>
+
+<div class="grid-stats mt-3" style="max-width:600px;">
+    <div class="card stat-card">
+        <div class="stat-label">Current Weekly Days</div>
+        <div class="stat-value">{{ user.weekly_goal_days or 5 }}</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-label">Current Weekly Minutes</div>
+        <div class="stat-value">{{ user.weekly_goal_minutes or 150 }}</div>
+    </div>
+</div>
+{% endblock %}

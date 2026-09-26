@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}Error{% endblock %}
+{% block page_title %}Oops!{% endblock %}
+{% block auth_main %}
+<div class="text-center">
+    <h1 style="font-size:72px; font-weight:900; letter-spacing:-3px;">{{ top }}</h1>
+    <p style="color:var(--gray); margin-bottom:24px;">{{ bottom }}</p>
+    <a href="/" class="btn btn-primary" style="width:auto; display:inline-flex;">Go back home</a>
+</div>
+{% endblock %}
+
+{% block main %}
+<div class="text-center" style="padding:60px 20px;">
+    <h1 style="font-size:72px; font-weight:900; letter-spacing:-3px;">{{ top }}</h1>
+    <p style="color:var(--gray); margin-bottom:24px;">{{ bottom }}</p>
+    <a href="/" class="btn btn-primary" style="width:auto; display:inline-flex;">Go back home</a>
+</div>
+{% endblock %}

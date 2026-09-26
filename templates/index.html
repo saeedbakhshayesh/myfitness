@@ -1,0 +1,151 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block main %}
+
+<!-- ===== Greeting ===== -->
+<div class="page-header">
+    <div>
+        <h2>Welcome back, {{ username }} 💪</h2>
+        <p>Here's your fitness overview for this week.</p>
+    </div>
+    <a href="/add" class="btn btn-primary" style="width:auto;">
+        <i class="bi bi-plus-lg"></i> New Workout
+    </a>
+</div>
+
+<!-- ===== Stat Cards ===== -->
+<div class="grid-stats mb-3">
+    <div class="card stat-card">
+        <div class="stat-icon"><i class="bi bi-activity"></i></div>
+        <div class="stat-label">This Week Workouts</div>
+        <div class="stat-value">{{ week_count }} <small>/ {{ goal_days }}</small></div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-icon"><i class="bi bi-clock-history"></i></div>
+        <div class="stat-label">Minutes This Week</div>
+        <div class="stat-value">{{ week_minutes }} <small>/ {{ goal_minutes }}</small></div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-icon"><i class="bi bi-fire"></i></div>
+        <div class="stat-label">Calories This Week</div>
+        <div class="stat-value">{{ week_calories }}</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-icon"><i class="bi bi-trophy"></i></div>
+        <div class="stat-label">Total Workouts</div>
+        <div class="stat-value">{{ total_count }}</div>
+    </div>
+</div>
+
+<!-- ===== Weekly Progress ===== -->
+<div class="card mb-3">
+    <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">Weekly Progress</h3>
+
+    <div class="mb-2">
+        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+            <span class="fw-bold">Days</span>
+            <span class="text-muted">{{ week_count }} / {{ goal_days }} days</span>
+        </div>
+        <div class="progress">
+            <div class="progress-bar" style="width: {{ days_percent }}%;"></div>
+        </div>
+    </div>
+
+    <div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+            <span class="fw-bold">Minutes</span>
+            <span class="text-muted">{{ week_minutes }} / {{ goal_minutes }} min</span>
+        </div>
+        <div class="progress">
+            <div class="progress-bar" style="width: {{ minutes_percent }}%;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== Chart ===== -->
+<div class="card mb-3">
+    <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">Last 7 Days Activity</h3>
+    <canvas id="weekChart" height="90"></canvas>
+</div>
+
+<!-- ===== Recent Workouts ===== -->
+<div class="page-header">
+    <h3 style="font-size:16px; font-weight:700;">Recent Workouts</h3>
+    <a href="/workouts" style="font-size:14px; font-weight:600; color:var(--black);">
+        View all <i class="bi bi-arrow-right"></i>
+    </a>
+</div>
+
+{% if recent %}
+<div class="table-wrapper">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Category</th>
+                <th>Duration</th>
+                <th>Calories</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for w in recent %}
+            <tr>
+                <td class="fw-bold">{{ w.type }}</td>
+                <td><span class="badge-pill badge-{{ w.category|lower }}">{{ w.category }}</span></td>
+                <td>{{ w.duration }} min</td>
+                <td>{{ w.calories }} kcal</td>
+                <td class="text-muted">{{ w.date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card empty-state">
+    <i class="bi bi-clipboard-x"></i>
+    <h3>No workouts yet</h3>
+    <p>Start tracking your first workout today!</p>
+    <a href="/add" class="btn btn-primary mt-2" style="width:auto; display:inline-flex;">Add Workout</a>
+</div>
+{% endif %}
+
+<!-- ===== Chart Script ===== -->
+<script>
+    const ctx = document.getElementById('weekChart');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ chart_labels | tojson }},
+            datasets: [{
+                label: 'Minutes',
+                data: {{ chart_minutes | tojson }},
+                backgroundColor: '#0a0a0a',
+                borderRadius: 8,
+                barThickness: 32,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#f0f0f0' },
+                    ticks: { color: '#6b6b6b', font: { family: 'Inter' } }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#6b6b6b', font: { family: 'Inter' } }
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}
